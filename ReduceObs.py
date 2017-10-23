@@ -13,6 +13,7 @@ Data Reduction:
 
 import numpy as np
 import matplotlib.pyplot as plt
+from sys import argv
 
 # Extracts data from file
 def getdata(name):
@@ -30,33 +31,41 @@ def getdata(name):
     time = dat[:,0]
     allflux = dat[:,1:]
     return wlen,allflux,time,obs_time
-
-filename = 'tenminobs.dat'
+'''
+filename = '../flattened_observation_2.dat'
 avint,navint,havint=[],[],[]
 
 wlen,allinten,obs,ot = getdata(filename)
+''''''
+avint,navint,havint=[],[],[]
 
 for inten in allinten:
     care = np.where((wlen>391)&(wlen<395))
-    #care = np.where((wlen>420)&(wlen<430))
     avint.append(sum(inten[care])/(len(wlen[care])))
     
-    #nocare = np.where((wlen>400)&(wlen<405))
     nocare = np.where((wlen>386)&(wlen<390))
     navint.append(sum(inten[nocare])/(len(wlen[nocare])))
     
-    hocare = np.where((wlen>420)&(wlen<430))
+    hocare = np.where((wlen>400)&(wlen<410))
     havint.append(sum(inten[hocare])/(len(wlen[hocare])))
 
 navint = np.multiply(np.median(avint)/np.median(navint),navint)
-#havint = np.multiply(np.median(avint)/np.median(havint),havint)
-#plt.plot(obs,havint)
-#plt.xlim(1000,1040)
+havint = np.multiply(np.median(avint)/np.median(havint),havint)
+'''
+# Ca line
 plt.plot(obs,avint,alpha=.7)
+
+# just under line
 plt.plot(obs,navint,alpha=.7)
+
+# way over line
+plt.plot(obs,havint,alpha=.7)
+
+
 plt.show()
 
 wellokay = np.divide(avint,navint)
 #plt.xlim(1000,1040)
 plt.plot(obs,wellokay)
+
 plt.show()
