@@ -1,5 +1,5 @@
 import numpy as np
-
+# yo what's up
 name = '../someobs.dat'
 
 fil = open(name,'r')
