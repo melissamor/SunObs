@@ -1,0 +1,19 @@
+Date: 2018-05-09
+
+Local Observation Start Time:
+3:11pm
+
+Exposure Time:
+5s
+
+Weather Notes:
+Clear!
+
+Other Notes:
+No wavelength filter
+3:35pm: moved dome, may have hit it a bit
+4:05pm: moved telescope to stow before shutting off observations, ignore last few frames
+Sky frames have some dome, so not reliable
+
+Reason For Closing:
+Late in the day

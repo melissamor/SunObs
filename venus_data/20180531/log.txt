@@ -1,0 +1,19 @@
+Date: 2018-05-31
+
+Local Observation Start Time:
+11:20 AM
+
+Exposure Time:
+7 seconds
+
+Weather Notes:
+partly cloudy.
+clear after noon, remained clear the rest of the day
+
+Other Notes:
+readjusted optical cable @ 12:30 (before sky observations)
+1:17pm: switched from sky to venus, moved dome flap
+4:58 stopped obs
+5:00 took 5 minute dark
+
+Reason For Closing:
