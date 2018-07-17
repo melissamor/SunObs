@@ -2,8 +2,12 @@
 TakeObs.py
 
 Takes time series spectral observations.
+
+Syntax with optional arguments:
+python TakeObs.py -s [path to output data] -p (only use if you do not want a live updating plot) -i [integration time in microseconds] -t [total observation time in seconds]
 '''
 __author__ = 'Melissa Morris'
+# More info on seabreeze module: https://github.com/ap--/python-seabreeze
 import seabreeze.spectrometers as sb
 import matplotlib.pyplot as plt
 from time import time
@@ -12,6 +16,7 @@ import datetime
 import argparse
 from glob import glob
 
+# Lists all possible arguments and what their purpose is
 parser = argparse.ArgumentParser()
 parser.add_argument('--save','-s',action='store',default=False,help='specify the base file name in which data will be saved')
 parser.add_argument('--noplot','-p',action='store_true',default=False,help='get rid of live updating plot')
@@ -23,14 +28,13 @@ args = parser.parse_args()
 devices = sb.list_devices()
 spec = sb.Spectrometer(devices[0])
 
-# Integration time
-#spec.integration_time_micros(args.integrationtime)
+# Set integration time
 spec.integration_time_micros(float(args.integrationtime))
 
 # Define initial wavelengths and intensities
 wlen = np.array(spec.wavelengths())
-filt=np.where((wlen>=325)&(wlen<=475))
-wlen=wlen[filt]
+filt = np.where((wlen>=325)&(wlen<=475))
+wlen = wlen[filt]
 inten = spec.intensities()[filt]
 
 # Create plot of Intensity vs. Wavelength
@@ -45,16 +49,20 @@ if not args.noplot:
     plt.ylabel('intensity')
     plt.xlabel('wavelengths (nm)')
 
-# Specify base name of data file
+# Begins to write file and saves header
 if args.save:
     basename = args.save
+    # If a file with the spedified name exists, raises an error and stops running the program
     if basename in glob(basename):
         raise ValueError('This file already exists. Delete it or save data to a different file.')
+    # Creates file
     f = open(basename,'w')
-    observation_time = datetime.datetime.utcnow()
-    strwlen = ','.join([str(i) for i in wlen])
+    observation_time = datetime.datetime.utcnow()   # Current date and time
+    strwlen = ','.join([str(i) for i in wlen])  # Creates a string that is every wavelength separated by commas
+    # Write header to file
     f.write('UTC Time: '+str(observation_time)+'\nExposure Time: '+str(args.integrationtime)+'\nTime,'+strwlen)
     f.close()
+    # Open file in append mode in order to add data to it
     f = open(basename,'a')
 
 plotting = 0
@@ -78,7 +86,7 @@ try:
             plt.draw()
             plt.pause(.0001)
         
-        
+        # Updates time
         plotting += 1
         t1 = time()
 
@@ -86,6 +94,9 @@ try:
         f.close()
     
     spec.close()
+
+# If the code is ended with a keyboard interrupt, closes spectrometer and files
+# *** Not entirely sure that this is working properly
 except KeyboardInterrupt:
     if args.save:
         f.close()
